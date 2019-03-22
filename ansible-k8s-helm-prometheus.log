@@ -446,3 +446,143 @@
 2019-03-22 10:13:19,257 p=23608 u=yungshun |  master1                    : ok=9    changed=5    unreachable=0    failed=0   
 2019-03-22 10:13:19,257 p=23608 u=yungshun |  worker1                    : ok=3    changed=0    unreachable=0    failed=0   
 2019-03-22 10:13:19,257 p=23608 u=yungshun |  worker2                    : ok=3    changed=0    unreachable=0    failed=0   
+2019-03-22 11:08:09,549 p=27024 u=yungshun |  PLAY [prometheus-directories] **************************************************
+2019-03-22 11:08:09,559 p=27024 u=yungshun |  TASK [Create directory for alertmanager-pv] ************************************
+2019-03-22 11:08:10,206 p=27024 u=yungshun |  ok: [master1]
+2019-03-22 11:08:11,377 p=27024 u=yungshun |  ok: [worker1]
+2019-03-22 11:08:11,398 p=27024 u=yungshun |  ok: [worker2]
+2019-03-22 11:08:11,408 p=27024 u=yungshun |  TASK [Create directory for pushgateway-pv] *************************************
+2019-03-22 11:08:11,913 p=27024 u=yungshun |  ok: [master1]
+2019-03-22 11:08:11,934 p=27024 u=yungshun |  ok: [worker1]
+2019-03-22 11:08:11,951 p=27024 u=yungshun |  ok: [worker2]
+2019-03-22 11:08:11,957 p=27024 u=yungshun |  TASK [Create directory for server-pv] ******************************************
+2019-03-22 11:08:12,492 p=27024 u=yungshun |  ok: [worker1]
+2019-03-22 11:08:12,494 p=27024 u=yungshun |  ok: [master1]
+2019-03-22 11:08:12,508 p=27024 u=yungshun |  ok: [worker2]
+2019-03-22 11:08:12,524 p=27024 u=yungshun |  PLAY [prometheus] **************************************************************
+2019-03-22 11:08:12,534 p=27024 u=yungshun |  TASK [Copy multiple .yml files to remote] **************************************
+2019-03-22 11:08:33,876 p=27024 u=yungshun |  changed: [master1] => (item=prometheus/)
+2019-03-22 11:08:34,466 p=27024 u=yungshun |  ok: [master1] => (item=server-pv.yml)
+2019-03-22 11:08:35,071 p=27024 u=yungshun |  ok: [master1] => (item=alertmanager-pv.yml)
+2019-03-22 11:08:35,678 p=27024 u=yungshun |  ok: [master1] => (item=pushgateway-pv.yml)
+2019-03-22 11:08:35,684 p=27024 u=yungshun |  TASK [Initialize persistent volumes for prometheus server] *********************
+2019-03-22 11:08:38,457 p=27024 u=yungshun |  changed: [master1]
+2019-03-22 11:08:38,463 p=27024 u=yungshun |  TASK [Initialize persistent volumes for alertmanager] **************************
+2019-03-22 11:08:41,538 p=27024 u=yungshun |  changed: [master1]
+2019-03-22 11:08:41,542 p=27024 u=yungshun |  TASK [Initialize persistent volumes for pushgateway] ***************************
+2019-03-22 11:08:44,238 p=27024 u=yungshun |  changed: [master1]
+2019-03-22 11:08:44,243 p=27024 u=yungshun |  TASK [Install Prometheus by Helm] **********************************************
+2019-03-22 11:08:48,514 p=27024 u=yungshun |  changed: [master1]
+2019-03-22 11:08:48,519 p=27024 u=yungshun |  TASK [Debug install_prometheus] ************************************************
+2019-03-22 11:08:48,604 p=27024 u=yungshun |  ok: [master1] => {
+    "install_prometheus": {
+        "changed": true, 
+        "cmd": "helm install --name prometheus ./prometheus", 
+        "delta": "0:00:03.851772", 
+        "end": "2019-03-22 11:08:48.423012", 
+        "failed": false, 
+        "rc": 0, 
+        "start": "2019-03-22 11:08:44.571240", 
+        "stderr": "", 
+        "stderr_lines": [], 
+        "stdout": "NAME:   prometheus\nLAST DEPLOYED: Fri Mar 22 11:08:44 2019\nNAMESPACE: default\nSTATUS: DEPLOYED\n\nRESOURCES:\n==> v1/ConfigMap\nNAME                     DATA  AGE\nprometheus-alertmanager  1     1s\nprometheus-server        3     1s\n\n==> v1/PersistentVolumeClaim\nNAME                     STATUS   VOLUME           CAPACITY  ACCESS MODES   STORAGECLASS  AGE\nprometheus-alertmanager  Pending  alertmanager-pv  0         local-storage  1s\nprometheus-server        Pending  local-storage    1s\n\n==> v1/Service\nNAME                           TYPE       CLUSTER-IP     EXTERNAL-IP  PORT(S)   AGE\nprometheus-alertmanager        ClusterIP  10.103.73.68   <none>       80/TCP    1s\nprometheus-kube-state-metrics  ClusterIP  None           <none>       80/TCP    1s\nprometheus-node-exporter       ClusterIP  None           <none>       9100/TCP  1s\nprometheus-pushgateway         ClusterIP  10.104.189.58  <none>       9091/TCP  1s\nprometheus-server              ClusterIP  10.107.175.86  <none>       80/TCP    1s\n\n==> v1/Pod(related)\nNAME                                           READY  STATUS             RESTARTS  AGE\nprometheus-node-exporter-87frw                 0/1    ContainerCreating  0         1s\nprometheus-node-exporter-ldhrb                 0/1    ContainerCreating  0         1s\nprometheus-alertmanager-5947b79b6f-8b777       0/2    Pending            0         0s\nprometheus-kube-state-metrics-dbfff5557-9vg5z  0/1    ContainerCreating  0         0s\nprometheus-pushgateway-78cdf86f58-hzsvq        0/1    ContainerCreating  0         0s\nprometheus-server-9c75595c8-mjxgg              0/2    Pending            0         0s\n\n==> v1/ServiceAccount\nNAME                           SECRETS  AGE\nprometheus-alertmanager        1        1s\nprometheus-kube-state-metrics  1        1s\nprometheus-node-exporter       1        1s\nprometheus-pushgateway         1        1s\nprometheus-server              1        1s\n\n==> v1beta1/ClusterRole\nNAME                           AGE\nprometheus-kube-state-metrics  1s\nprometheus-server              1s\n\n==> v1beta1/ClusterRoleBinding\nNAME                           AGE\nprometheus-kube-state-metrics  1s\nprometheus-server              1s\n\n==> v1beta1/DaemonSet\nNAME                      DESIRED  CURRENT  READY  UP-TO-DATE  AVAILABLE  NODE SELECTOR  AGE\nprometheus-node-exporter  2        2        0      2           0          <none>         1s\n\n==> v1beta1/Deployment\nNAME                           DESIRED  CURRENT  UP-TO-DATE  AVAILABLE  AGE\nprometheus-alertmanager        1        1        1           0          1s\nprometheus-kube-state-metrics  1        1        1           0          1s\nprometheus-pushgateway         1        1        1           0          1s\nprometheus-server              1        1        1           0          1s\n\n\nNOTES:\nThe Prometheus server can be accessed via port 80 on the following DNS name from within your cluster:\nprometheus-server.default.svc.cluster.local\n\n\nGet the Prometheus server URL by running these commands in the same shell:\n  export POD_NAME=$(kubectl get pods --namespace default -l \"app=prometheus,component=server\" -o jsonpath=\"{.items[0].metadata.name}\")\n  kubectl --namespace default port-forward $POD_NAME 9090\n\n\nThe Prometheus alertmanager can be accessed via port 80 on the following DNS name from within your cluster:\nprometheus-alertmanager.default.svc.cluster.local\n\n\nGet the Alertmanager URL by running these commands in the same shell:\n  export POD_NAME=$(kubectl get pods --namespace default -l \"app=prometheus,component=alertmanager\" -o jsonpath=\"{.items[0].metadata.name}\")\n  kubectl --namespace default port-forward $POD_NAME 9093\n\n\nThe Prometheus PushGateway can be accessed via port 9091 on the following DNS name from within your cluster:\nprometheus-pushgateway.default.svc.cluster.local\n\n\nGet the PushGateway URL by running these commands in the same shell:\n  export POD_NAME=$(kubectl get pods --namespace default -l \"app=prometheus,component=pushgateway\" -o jsonpath=\"{.items[0].metadata.name}\")\n  kubectl --namespace default port-forward $POD_NAME 9091\n\nFor more information on running Prometheus, visit:\nhttps://prometheus.io/", 
+        "stdout_lines": [
+            "NAME:   prometheus", 
+            "LAST DEPLOYED: Fri Mar 22 11:08:44 2019", 
+            "NAMESPACE: default", 
+            "STATUS: DEPLOYED", 
+            "", 
+            "RESOURCES:", 
+            "==> v1/ConfigMap", 
+            "NAME                     DATA  AGE", 
+            "prometheus-alertmanager  1     1s", 
+            "prometheus-server        3     1s", 
+            "", 
+            "==> v1/PersistentVolumeClaim", 
+            "NAME                     STATUS   VOLUME           CAPACITY  ACCESS MODES   STORAGECLASS  AGE", 
+            "prometheus-alertmanager  Pending  alertmanager-pv  0         local-storage  1s", 
+            "prometheus-server        Pending  local-storage    1s", 
+            "", 
+            "==> v1/Service", 
+            "NAME                           TYPE       CLUSTER-IP     EXTERNAL-IP  PORT(S)   AGE", 
+            "prometheus-alertmanager        ClusterIP  10.103.73.68   <none>       80/TCP    1s", 
+            "prometheus-kube-state-metrics  ClusterIP  None           <none>       80/TCP    1s", 
+            "prometheus-node-exporter       ClusterIP  None           <none>       9100/TCP  1s", 
+            "prometheus-pushgateway         ClusterIP  10.104.189.58  <none>       9091/TCP  1s", 
+            "prometheus-server              ClusterIP  10.107.175.86  <none>       80/TCP    1s", 
+            "", 
+            "==> v1/Pod(related)", 
+            "NAME                                           READY  STATUS             RESTARTS  AGE", 
+            "prometheus-node-exporter-87frw                 0/1    ContainerCreating  0         1s", 
+            "prometheus-node-exporter-ldhrb                 0/1    ContainerCreating  0         1s", 
+            "prometheus-alertmanager-5947b79b6f-8b777       0/2    Pending            0         0s", 
+            "prometheus-kube-state-metrics-dbfff5557-9vg5z  0/1    ContainerCreating  0         0s", 
+            "prometheus-pushgateway-78cdf86f58-hzsvq        0/1    ContainerCreating  0         0s", 
+            "prometheus-server-9c75595c8-mjxgg              0/2    Pending            0         0s", 
+            "", 
+            "==> v1/ServiceAccount", 
+            "NAME                           SECRETS  AGE", 
+            "prometheus-alertmanager        1        1s", 
+            "prometheus-kube-state-metrics  1        1s", 
+            "prometheus-node-exporter       1        1s", 
+            "prometheus-pushgateway         1        1s", 
+            "prometheus-server              1        1s", 
+            "", 
+            "==> v1beta1/ClusterRole", 
+            "NAME                           AGE", 
+            "prometheus-kube-state-metrics  1s", 
+            "prometheus-server              1s", 
+            "", 
+            "==> v1beta1/ClusterRoleBinding", 
+            "NAME                           AGE", 
+            "prometheus-kube-state-metrics  1s", 
+            "prometheus-server              1s", 
+            "", 
+            "==> v1beta1/DaemonSet", 
+            "NAME                      DESIRED  CURRENT  READY  UP-TO-DATE  AVAILABLE  NODE SELECTOR  AGE", 
+            "prometheus-node-exporter  2        2        0      2           0          <none>         1s", 
+            "", 
+            "==> v1beta1/Deployment", 
+            "NAME                           DESIRED  CURRENT  UP-TO-DATE  AVAILABLE  AGE", 
+            "prometheus-alertmanager        1        1        1           0          1s", 
+            "prometheus-kube-state-metrics  1        1        1           0          1s", 
+            "prometheus-pushgateway         1        1        1           0          1s", 
+            "prometheus-server              1        1        1           0          1s", 
+            "", 
+            "", 
+            "NOTES:", 
+            "The Prometheus server can be accessed via port 80 on the following DNS name from within your cluster:", 
+            "prometheus-server.default.svc.cluster.local", 
+            "", 
+            "", 
+            "Get the Prometheus server URL by running these commands in the same shell:", 
+            "  export POD_NAME=$(kubectl get pods --namespace default -l \"app=prometheus,component=server\" -o jsonpath=\"{.items[0].metadata.name}\")", 
+            "  kubectl --namespace default port-forward $POD_NAME 9090", 
+            "", 
+            "", 
+            "The Prometheus alertmanager can be accessed via port 80 on the following DNS name from within your cluster:", 
+            "prometheus-alertmanager.default.svc.cluster.local", 
+            "", 
+            "", 
+            "Get the Alertmanager URL by running these commands in the same shell:", 
+            "  export POD_NAME=$(kubectl get pods --namespace default -l \"app=prometheus,component=alertmanager\" -o jsonpath=\"{.items[0].metadata.name}\")", 
+            "  kubectl --namespace default port-forward $POD_NAME 9093", 
+            "", 
+            "", 
+            "The Prometheus PushGateway can be accessed via port 9091 on the following DNS name from within your cluster:", 
+            "prometheus-pushgateway.default.svc.cluster.local", 
+            "", 
+            "", 
+            "Get the PushGateway URL by running these commands in the same shell:", 
+            "  export POD_NAME=$(kubectl get pods --namespace default -l \"app=prometheus,component=pushgateway\" -o jsonpath=\"{.items[0].metadata.name}\")", 
+            "  kubectl --namespace default port-forward $POD_NAME 9091", 
+            "", 
+            "For more information on running Prometheus, visit:", 
+            "https://prometheus.io/"
+        ]
+    }
+}
+2019-03-22 11:08:48,606 p=27024 u=yungshun |  PLAY RECAP *********************************************************************
+2019-03-22 11:08:48,606 p=27024 u=yungshun |  master1                    : ok=9    changed=5    unreachable=0    failed=0   
+2019-03-22 11:08:48,607 p=27024 u=yungshun |  worker1                    : ok=3    changed=0    unreachable=0    failed=0   
+2019-03-22 11:08:48,607 p=27024 u=yungshun |  worker2                    : ok=3    changed=0    unreachable=0    failed=0   

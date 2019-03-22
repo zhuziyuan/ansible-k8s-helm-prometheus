@@ -94,6 +94,7 @@ For more information on running Prometheus, visit:
 https://prometheus.io/
 
 ## Testing
+### Inside cluster
 $ export POD_NAME=$(kubectl get pods --namespace default -l "app=prometheus,component=server" -o jsonpath="{.items[0].metadata.name}")
 
 $ kubectl --namespace default port-forward $POD_NAME 9090
@@ -106,3 +107,28 @@ $ curl localhost:9090
 $ curl localhost:9090/metrics
 
 $ curl localhost:9090/graph
+
+### Outside cluster
+$ kubectl expose deploy prometheus-server --type=NodePort --name=prometheus-server-service
+service/prometheus-server-service exposed
+ccma@k8s-master:~$ kubectl describe svc prometheus-server-service
+Name:                     prometheus-server-service
+Namespace:                default
+Labels:                   app=prometheus
+                          chart=prometheus-8.9.0
+                          component=server
+                          heritage=Tiller
+                          release=prometheus
+Annotations:              <none>
+Selector:                 app=prometheus,component=server,release=prometheus
+Type:                     NodePort
+IP:                       10.104.124.78
+Port:                     <unset>  9090/TCP
+TargetPort:               9090/TCP
+NodePort:                 <unset>  30219/TCP
+Endpoints:                10.244.2.206:9090
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+
+### Browse 10.236.1.1:30219
