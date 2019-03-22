@@ -24,3 +24,41 @@
         path: /home/ccma/data/server-data
         state: directory
         mode: 0755 
+
+- name: prometheus
+  hosts: master1
+  gather_facts: no
+
+  vars:
+    ansible_become_pass: "ccma"
+
+  tasks:
+    - name: Copy multiple .yml files to remote
+      copy: 
+        src: "{{ item }}"
+        dest: "/home/ccma/{{ item }}"
+        owner: ccma
+        group: ccma
+        mode: 0644
+      with_items:
+        - prometheus/
+        - server-pv.yml
+        - alertmanager-pv.yml
+        - pushgateway-pv.yml
+
+    - name: Initialize persistent volumes for prometheus server
+      shell: "kubectl create -f server-pv.yml"
+      environment: 
+        KUBECONFIG: /home/ccma/.kube/config
+
+    - name: Initialize persistent volumes for alertmanager
+      shell: "kubectl create -f alertmanager-pv.yml"
+      environment: 
+        KUBECONFIG: /home/ccma/.kube/config
+
+    - name: Initialize persistent volumes for pushgateway
+      shell: "kubectl create -f pushgateway-pv.yml"
+      environment: 
+        KUBECONFIG: /home/ccma/.kube/config
+
+
