@@ -1,0 +1,26 @@
+---
+- name: prometheus-directories
+  hosts: ccma
+  gather_facts: no
+
+  vars:
+    ansible_become_pass: "ccma"
+
+  tasks:
+    - name: Create directory for alertmanager-pv
+      file:
+        path: /home/ccma/data/alertmanager-data
+        state: directory
+        mode: 0755
+   
+    - name: Create directory for pushgateway-pv
+      file:
+        path: /home/ccma/data/pushgateway-data
+        state: directory
+        mode: 0755 
+  
+    - name: Create directory for server-pv
+      file:
+        path: /home/ccma/data/server-data
+        state: directory
+        mode: 0755 
