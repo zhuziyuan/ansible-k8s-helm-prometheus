@@ -61,4 +61,12 @@
       environment: 
         KUBECONFIG: /home/ccma/.kube/config
 
+    - name: Install Prometheus by Helm
+      shell: "helm install --name prometheus ./prometheus"
+      environment:
+        KUBECONFIG: /home/ccma/.kube/config
+      register: install_prometheus
 
+    - name: Debug install_prometheus
+      debug:
+        var: install_prometheus
